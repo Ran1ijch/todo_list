@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO List</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0a0a0a;
+            background-image:
+                radial-gradient(circle at top left, rgba(255, 0, 90, 0.2), transparent 35%),
+                radial-gradient(circle at bottom right, rgba(255, 0, 120, 0.2), transparent 35%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 500px;
+            padding: 30px;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid #ff0055;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.4);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff0055;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff0055;
+        }
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            background: #111;
+            border: 1px solid #ff0055;
+            border-radius: 10px;
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            box-shadow: 0 0 10px #ff0055;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            background: #ff0055;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            box-shadow: 0 0 15px #ff0055;
+            transform: translateY(-2px);
+        }
+
+        .total {
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+
+        .todo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #151515;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff0055;
+            transition: 0.3s;
+        }
+
+        .todo:hover {
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+        }
+
+        .delete {
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>TODO List</h1>
+
+    <form action="/add" method="post">
+        <input type="text" name="todo" placeholder="Введите задачу..." required>
+        <button type="submit">ADD</button>
+    </form>
+
+    <p class="total">Total: {{ todos|length }}</p>
+
+    {% for todo in todos %}
+    <div class="todo">
+        <span>{{ todo }}</span>
+        <a class="delete" href="/delete/{{ loop.index0 }}">💀</a>
+    </div>
+    {% endfor %}
+
+    {% if not todos %}
+    <h2 class="empty">No todos yet</h2>
+    {% endif %}
+</div>
+
+</body>
+</html>
+
+
+
