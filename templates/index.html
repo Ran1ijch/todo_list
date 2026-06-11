@@ -1,122 +1,248 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>TODO List</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TODO List</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }
+<style>
+:root{
+    --bg:#0a0a0a;
+    --card:#141414;
+    --accent:#ff0055;
+    --text:white;
+    --input:#111;
+}
 
-        body {
-            min-height: 100vh;
-            background: #0a0a0a;
-            background-image:
-                radial-gradient(circle at top left, rgba(255, 0, 90, 0.2), transparent 35%),
-                radial-gradient(circle at bottom right, rgba(255, 0, 120, 0.2), transparent 35%);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+/* Frost Theme */
+body.frost{
+    --bg:linear-gradient(135deg,#dcefff,#eef7ff,#d4ecff);
+    --card:rgba(255,255,255,0.55);
+    --accent:#7cc6ff;
+    --text:#0f172a;
+    --input:rgba(255,255,255,0.75);
 
-        .container {
-            width: 500px;
-            padding: 30px;
-            background: rgba(20, 20, 20, 0.95);
-            border: 1px solid #ff0055;
-            border-radius: 20px;
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.4);
-        }
+    position:relative;
+    overflow-x:hidden;
+}
 
-        h1 {
-            text-align: center;
-            color: #ff0055;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px #ff0055;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
 
-        form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:var(--bg);
+    color:var(--text);
+    transition:0.5s;
+}
 
-        input {
-            flex: 1;
-            padding: 12px;
-            background: #111;
-            border: 1px solid #ff0055;
-            border-radius: 10px;
-            color: white;
-            outline: none;
-        }
+/* Frost Effects */
 
-        input:focus {
-            box-shadow: 0 0 10px #ff0055;
-        }
+body.frost::before,
+body.frost::after{
+    content:"";
+    position:fixed;
+    border-radius:50%;
+    filter:blur(90px);
+    z-index:-2;
+}
 
-        button {
-            padding: 12px 18px;
-            border: none;
-            border-radius: 10px;
-            background: #ff0055;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+body.frost::before{
+    width:400px;
+    height:400px;
+    background:rgba(124,198,255,.45);
+    top:-120px;
+    left:-120px;
+    animation:float1 15s ease-in-out infinite;
+}
 
-        button:hover {
-            box-shadow: 0 0 15px #ff0055;
-            transform: translateY(-2px);
-        }
+body.frost::after{
+    width:350px;
+    height:350px;
+    background:rgba(180,230,255,.4);
+    right:-100px;
+    bottom:-100px;
+    animation:float2 18s ease-in-out infinite;
+}
 
-        .total {
-            margin-bottom: 15px;
-            color: #aaa;
-        }
+.snow{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-1;
+    opacity:0;
+}
 
-        .todo {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #151515;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-left: 4px solid #ff0055;
-            transition: 0.3s;
-        }
+body.frost .snow{
+    opacity:1;
 
-        .todo:hover {
-            transform: translateX(5px);
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
-        }
+    background-image:
+        radial-gradient(circle,rgba(255,255,255,.9) 2px,transparent 2px),
+        radial-gradient(circle,rgba(255,255,255,.6) 1px,transparent 1px),
+        radial-gradient(circle,rgba(255,255,255,.8) 1.5px,transparent 1.5px);
 
-        .delete {
-            text-decoration: none;
-            font-size: 20px;
-        }
+    background-size:
+        180px 180px,
+        120px 120px,
+        240px 240px;
 
-        .empty {
-            text-align: center;
-            color: #777;
-            margin-top: 20px;
-        }
-    </style>
+    animation:snowfall 18s linear infinite;
+}
+
+@keyframes snowfall{
+    from{
+        transform:translateY(-40px);
+    }
+    to{
+        transform:translateY(60px);
+    }
+}
+
+@keyframes float1{
+    0%,100%{
+        transform:translate(0,0);
+    }
+    50%{
+        transform:translate(90px,40px);
+    }
+}
+
+@keyframes float2{
+    0%,100%{
+        transform:translate(0,0);
+    }
+    50%{
+        transform:translate(-80px,-50px);
+    }
+}
+
+/* Container */
+
+.container{
+    width:550px;
+    padding:30px;
+    border-radius:20px;
+    background:var(--card);
+    border:1px solid var(--accent);
+    backdrop-filter:blur(20px);
+    box-shadow:0 0 25px rgba(255,0,85,.35);
+    transition:0.5s;
+}
+
+body.frost .container{
+    box-shadow:
+        0 8px 32px rgba(124,198,255,.25),
+        0 0 35px rgba(124,198,255,.2);
+}
+
+h1{
+    text-align:center;
+    color:var(--accent);
+    margin-bottom:15px;
+}
+
+#themeBtn{
+    width:100%;
+    padding:12px;
+    margin-bottom:20px;
+    border:none;
+    border-radius:10px;
+    background:var(--accent);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+#themeBtn:hover{
+    transform:translateY(-2px);
+}
+
+form{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+input{
+    flex:1;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid var(--accent);
+    background:var(--input);
+    color:var(--text);
+    outline:none;
+}
+
+input:focus{
+    box-shadow:0 0 10px var(--accent);
+}
+
+button[type="submit"]{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    background:var(--accent);
+    color:white;
+    cursor:pointer;
+}
+
+.total{
+    margin-bottom:15px;
+}
+
+.todo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:10px;
+    background:rgba(255,255,255,.05);
+    border-left:4px solid var(--accent);
+    transition:.3s;
+}
+
+.todo:hover{
+    transform:translateX(5px);
+}
+
+.todo a{
+    text-decoration:none;
+    font-size:20px;
+}
+
+.empty{
+    text-align:center;
+    opacity:.7;
+    margin-top:15px;
+}
+</style>
 </head>
 <body>
 
+<div class="snow"></div>
+
 <div class="container">
-    <h1>TODO List</h1>
+
+    <h1>🍷 TODO LIST</h1>
+
+    <button id="themeBtn">❄ Frost Theme</button>
 
     <form action="/add" method="post">
-        <input type="text" name="todo" placeholder="Введите задачу..." required>
+        <input
+            type="text"
+            name="todo"
+            placeholder="Введите задачу..."
+            required
+        >
         <button type="submit">ADD</button>
     </form>
 
@@ -125,17 +251,38 @@
     {% for todo in todos %}
     <div class="todo">
         <span>{{ todo }}</span>
-        <a class="delete" href="/delete/{{ loop.index0 }}">💀</a>
+        <a href="/delete/{{ loop.index0 }}">💀</a>
     </div>
     {% endfor %}
 
     {% if not todos %}
     <h2 class="empty">No todos yet</h2>
     {% endif %}
+
 </div>
+
+<script>
+const btn = document.getElementById("themeBtn");
+
+btn.addEventListener("click", () => {
+    document.body.classList.toggle("frost");
+
+    if(document.body.classList.contains("frost")){
+        btn.textContent = "🍷 Burgundy Theme";
+        localStorage.setItem("theme","frost");
+    } else {
+        btn.textContent = "❄ Frost Theme";
+        localStorage.setItem("theme","burgundy");
+    }
+});
+
+if(localStorage.getItem("theme") === "frost"){
+    document.body.classList.add("frost");
+    btn.textContent = "🍷 Burgundy Theme";
+}
+</script>
 
 </body>
 </html>
-
 
 
